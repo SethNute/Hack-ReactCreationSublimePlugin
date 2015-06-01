@@ -1,0 +1,7 @@
+[
+	{
+		"caption": "Make New React Files",
+		"id": "side-bar-new-react-files",
+		"command": "make_react_files"
+	}
+]

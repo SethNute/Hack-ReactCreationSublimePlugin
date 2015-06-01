@@ -1,0 +1,6 @@
+[
+	{
+		"caption": "React Components: Create skeleton files",
+		"command": "make_react_files"
+	}
+]
