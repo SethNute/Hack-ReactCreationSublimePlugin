@@ -19,10 +19,10 @@ class MakeReactFilesBase(sublime_plugin.WindowCommand):
 
 		if self.attemptFileCreation(closure_file_path):
 			self.populateClosureFile(closure_file_path)
-			
+
 		if self.attemptFileCreation(react_file_path):
 			self.populateReactFile(react_file_path)
-		
+
 	def attemptFileCreation(self, file_to_create):
 		if os.path.exists(file_to_create):
 			sublime.error_message('File at %s already exists' % file_to_create)
@@ -47,17 +47,19 @@ class MakeReactFilesBase(sublime_plugin.WindowCommand):
 	def populateClosureFile(self, closure_file_path):
 		view = self.window.open_file(closure_file_path)
 		view.settings().set('is_Closure', True)
+		view.settings().set('make_React_Command_View', True)
 		self.setModuleNameSettingOnView(view)
 
 	def populateReactFile(self, react_file_path):
 		view = self.window.open_file(react_file_path)
 		view.settings().set('is_Closure', False)
+		view.settings().set('make_React_Command_View', True)
 		self.setModuleNameSettingOnView(view)
-	
-	def setModuleNameSettingOnView(self, view):		
+
+	def setModuleNameSettingOnView(self, view):
 		view.settings().set('react_module_name', (BASE_REACT_MODULE_PREFIX + self.MODULE_NAME))
 		view.settings().set('closure_module_name', (BASE_CLOSURE_MODULE_PREFIX + self.MODULE_NAME))
-		
+
 #Based on https://github.com/noklesta/SublimeQuickFileCreator/blob/master/SublimeQuickFileCreator.py
 class MakeReactFilesCommand(MakeReactFilesBase):
 	MODULE_NAME = None
@@ -69,10 +71,11 @@ class MakeReactFilesCommand(MakeReactFilesBase):
 
 class PopulateNewFilesListener(sublime_plugin.EventListener):
 	def on_load(self, view):
-		if view.settings().get('is_Closure'):
-			self.populateClosureFile(view)
-		else:
-			self.populateReactFile(view)
+		if view.setting().get('make_React_Command_View'):
+			if view.settings().get('is_Closure'):
+				self.populateClosureFile(view)
+			else:
+				self.populateReactFile(view)
 
 	def populateClosureFile(self, view):
 		snippet = """goog.provide('$1');
