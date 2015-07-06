@@ -71,7 +71,7 @@ class MakeReactFilesCommand(MakeReactFilesBase):
 
 class PopulateNewFilesListener(sublime_plugin.EventListener):
 	def on_load(self, view):
-		if view.setting().get('make_React_Command_View'):
+		if view.settings().get('make_React_Command_View'):
 			if view.settings().get('is_Closure'):
 				self.populateClosureFile(view)
 			else:
